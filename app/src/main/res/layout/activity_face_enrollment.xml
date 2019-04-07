@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="irisys.androidlunaplatformdemo.viewmodel.EnrollmentViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.FaceEnrollmentActivity">
+
+        <FrameLayout
+            android:id="@+id/layout_enroll_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/btn_toolbar_width"
+            android:layout_height="@dimen/btn_toolbar_height"
+            android:background="@drawable/btn_back_large"
+            android:onClick="@{()->viewModel.onBackBtnClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

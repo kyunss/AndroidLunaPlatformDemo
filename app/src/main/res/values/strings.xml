@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AndroidLunaPlatformDemo</string>
+    <string name="btn_face_enrollment">ENROLLMENT</string>
+    <string name="btn_face_recognitnion">RECOGNITION</string>
+
+    <!-- Dialog -->
+    <string name="camera_undetected">Camera Undetected</string>
+
+</resources>
