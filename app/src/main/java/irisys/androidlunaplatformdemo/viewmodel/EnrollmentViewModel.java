@@ -1,8 +1,12 @@
 package irisys.androidlunaplatformdemo.viewmodel;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.location.Location;
 import android.util.Log;
+
+import java.util.Locale;
 
 import irisys.androidlunaplatformdemo.contract.CameraContract;
 import irisys.androidlunaplatformdemo.contract.EnrollViewContract;
@@ -10,6 +14,7 @@ import irisys.androidlunaplatformdemo.model.LunaService;
 import irisys.androidlunaplatformdemo.view.LunaReposApplication;
 import irisys.androidlunaplatformdemo.view.RGBCameraPreview;
 import kr.co.irisys.kmodule.kmodule;
+import rx.schedulers.Schedulers;
 
 public class EnrollmentViewModel implements  kmodule.OnDetectListener, kmodule.OnExtractListener {
 
@@ -64,7 +69,30 @@ public class EnrollmentViewModel implements  kmodule.OnDetectListener, kmodule.O
         if (b) {
 
             //PreviewData 를 Bitmap으로 만들기
+            Bitmap bitmap = BitmapFactory.decodeByteArray(previewData , 0, previewData.length);
+            lunaService.createPerson();
 
+
+            Person person = new Person();
+
+            final Location location = locationHelper.getLastKnowLocation();
+            if (location != null) {
+                final String latLong = String.format(Locale.ENGLISH, "%s,%s", location.getLatitude(), location.getLongitude());
+                person.setPlaceOfBirth(latLong);
+            }
+
+            person.setIdentification(registrationModel.email + "; " + DeviceInfoHelper.getDeviceName() + "; " + DeviceInfoHelper.getDeviceOSVersion());
+            person.setFirstName(registrationModel.login);
+            person.setPhone(registrationModel.phone);
+
+            request = new CreatePersonRequest();
+            request.user_data = new String("_@login@_:" + registrationModel.login);
+            Log.i("LUNA2_DATA","user_data field is"+request.user_data);
+
+            api.createPersonLuna2(server + "/"+storage.APIVersion+"/storage/persons", EncodedUserData, request)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onCreatePersonSuccess,this::onCommonFail);
 
 
 
